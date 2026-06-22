@@ -1,13 +1,13 @@
 ---
 name: brain-dump
-description: Triage a raw brain dump into the Kidwell _planning files (NOW.md, INBOX.md, SOMEDAY.md, OPERATING-SHEET.md, bets/). Use when the founder says "brain dump", "process this", "clear my head", "sort this", or pastes a messy stream of ideas, updates, loops, or bet progress to be cleaned up and filed. The skill cleans the dump, asks only the clarifying questions the operating system requires, enforces the anti-jump guardrails, proposes a plan, and updates the files after confirmation. It is a triage tool, not a coding agent — it files and clarifies, it never builds.
+description: Triage a raw brain dump into the Kidwell planning files (NOW.md, INBOX.md, SOMEDAY.md, OPERATING-SHEET.md, bets/), OR run a guided first-time setup. Use when the founder says "brain dump", "process this", "clear my head", "sort this", "set me up", "walk me through", or pastes a messy stream of ideas, updates, loops, or bet progress. If OPERATING-SHEET.md §2 or §3 still has placeholders, run Setup mode (a one-question-at-a-time interview to define the season goal and this month's bet) instead of triage. The skill cleans the dump or guides setup, asks only the clarifying questions the operating system requires, enforces the anti-jump guardrails, proposes a plan, and updates the files after confirmation. It is a triage tool, not a coding agent — it files and clarifies, it never builds.
 ---
 
 # Brain Dump Triage
 
-Turn a messy stream of consciousness into clean, correctly-filed entries in the `_planning/` system — while protecting the active bet from scope creep and the founder from jumping.
+Turn a messy stream of consciousness into clean, correctly-filed entries in the planning repo — while protecting the active bet from scope creep and the founder from jumping.
 
-This skill operates the system described in `_planning/OPERATING-SHEET.md`. Read that file first every run, so the current goal and active bet are loaded before you classify anything.
+This skill operates the system described in `OPERATING-SHEET.md`. Read that file first every run, so the current goal and active bet are loaded before you classify anything.
 
 ## The files you manage
 
@@ -18,6 +18,33 @@ This skill operates the system described in `_planning/OPERATING-SHEET.md`. Read
 | `SOMEDAY.md` | Parked ideas that survived triage (candidate bets) | Low — append after triage |
 | `OPERATING-SHEET.md` | §2 goal (OKR), §3 active bet card, §4 open loops, appendix | High — confirm before editing §2/§3 |
 | `bets/<YYYY-MM-slug>.md` | Settled bets, frontmatter-stamped outcome + learning | Append at settlement only |
+
+## Setup mode (run this when §2 or §3 is still placeholders)
+
+If `OPERATING-SHEET.md` §2 or §3 contains `[bracketed]` placeholders — or the founder asks to be "walked through" / "set up" — do **not** run normal triage. Run a guided intake instead.
+
+Rules for this mode:
+- **One question at a time.** Wait for the answer before the next. This is an interview, not a form.
+- Enforce the same filters as always — a goal with no number isn't a goal; a bet with no readable signal isn't a bet.
+- Reflect each answer back in one line before moving on, so the founder hears it.
+- Write nothing until the end, then write all of §2, §3, and `NOW.md` together and read them back for a final yes.
+
+Ask in this order:
+
+1. **Committed goal — the number.** "What's the committed goal this season? Give me the exact figure and a date." If vague ("replace her income", "raise awareness") → push: "What's that in NIS/MRR, net, and by when?" Don't accept it without a number and a date.
+2. **The felt outcome.** "What's the single best thing about hitting it?" One sentence, concrete, personal — this is the WOOP Outcome and the fuel.
+3. **On-path check.** "Does hitting this also move you toward the 50K North Star, or only this number?" Flag if it's a shortcut that strands the bigger goal.
+4. **This month's bet — the thesis.** "What are you betting a month on? One sentence: doing X produces Y." Make sure it's an action they control, not the outcome itself.
+5. **Readable signal.** "What signal tells you by week 3–4 whether it's paying off?" If their answer is lagging (e.g. 'win 5 customers') → "That won't show in a month. What's the leading version?" Shrink it until it's readable inside the term.
+6. **Window.** "Start and end dates for the month?" Default to today → +1 month if they shrug.
+7. **Inner obstacle.** "What's the inner pattern most likely to derail this — be honest." Steer to the internal one (the jump, avoidance), not external chaos.
+8. **If-then plan.** "So: *if* [that obstacle shows up], *then* what's your move?" Write it as a literal if-then.
+
+Then assemble and write:
+- **§2** — Objective + KRs (the number + date as KR1, plus any sub-metrics named).
+- **§3** — the bet card: thesis, window, readable signal, settlement date, fold rule, and the WOOP block (W/O/O/P from answers 1,2,7,8).
+- **`NOW.md`** — three lines: the bet, the week-3 signal, the one if-then.
+Read all three back. On "yes", `git add . && git commit -m "planning: set up season goal and first bet" && git push`.
 
 ## Workflow
 
@@ -64,7 +91,7 @@ Wait for answers/confirmation.
 ### Step 6 — Commit & push (always last)
 After writing, stage, commit with a clear message, and push — so the change is live in tmux on the next `now`. Never leave the working copy dirty at the end of a run.
 ```bash
-git add _planning
+git add .
 git commit -m "planning: brain-dump triage $(date +%F)"
 git push
 ```
